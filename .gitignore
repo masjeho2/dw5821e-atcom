@@ -1,0 +1,17 @@
+# dependencies
+node_modules/
+
+# secrets & runtime data
+.env
+data/
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# build artifacts
+*.o
+tools/at_exec

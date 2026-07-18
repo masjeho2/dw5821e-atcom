@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AT Terminal — Login</title>
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+  <div class="login-box">
+    <div class="logo">⚡</div>
+    <div class="title">AT TERMINAL</div>
+    <div class="subtitle">DW5821e Modem</div>
+
+    <form id="login-form" onsubmit="return doLogin(event)">
+      <input type="password" id="password" placeholder="Masukkan password..." autofocus>
+      <button type="submit" id="btn-login">LOGIN</button>
+    </form>
+
+    <div id="error-msg"></div>
+  </div>
+
+  <script>
+    async function doLogin(e) {
+      e.preventDefault();
+      const pw = document.getElementById('password').value;
+      const btn = document.getElementById('btn-login');
+      const err = document.getElementById('error-msg');
+
+      btn.disabled = true;
+      btn.textContent = '...';
+      err.textContent = '';
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pw }),
+          credentials: 'same-origin'
+        });
+        const data = await res.json();
+        if (data.success) {
+          window.location.href = '/';
+        } else {
+          err.textContent = '❌ Password salah!';
+          document.getElementById('password').value = '';
+          document.getElementById('password').focus();
+        }
+      } catch (e) {
+        err.textContent = '❌ Error: ' + e.message;
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'LOGIN';
+    }
+
+    // Check if already logged in
+    fetch('/api/me', { credentials: 'same-origin' })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (d && d.success) window.location.href = '/';
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>
