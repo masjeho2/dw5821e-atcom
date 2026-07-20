@@ -52,9 +52,9 @@
             <button class="chip" onclick="quick('ATI')">ATI</button>
             <button class="chip" onclick="quick('AT+CSQ')">CSQ</button>
             <button class="chip" onclick="quick('AT+COPS?')">COPS?</button>
-            <button class="chip" onclick="quick('AT^DEBUG?')">DEBUG?</button>
+            <button class="chip" onclick="quick('AT^DEBUG?' )">DEBUG?</button>
             <button class="chip" onclick="quick('AT^NV=550')">NV=550</button>
-            <button class="chip" onclick="quick('AT+CIMI')">CIMI</button>
+            <button class="chip" onclick="quick('AT+CIMI' )">CIMI</button>
           </div>
           <div class="terminal" id="terminal">
             <div class="line info">AT Terminal v1.1 — DW5821e</div>
@@ -69,56 +69,56 @@
           <div class="card">
             <h3>📡 Info Modem</h3>
             <div class="btn-grid">
-              <button class="btn btn-soft" onclick="quick('ATI')">INFO MODEM</button>
-              <button class="btn btn-soft" onclick="quick('AT^DEBUG?')">DEBUG INFO</button>
-              <button class="btn btn-soft" onclick="quick('AT+CIMI')">IMSI SIM</button>
-              <button class="btn btn-soft" onclick="quick('AT^GETLTECAT?')">CAT Modem</button>
-              <button class="btn btn-soft" onclick="quick('AT+CSQ')">Signal</button>
-              <button class="btn btn-soft" onclick="quick('AT^USBTYPE')">USB Mode</button>
-              <button class="btn btn-soft" onclick="quick('AT+VOLT?')">Voltase</button>
-              <button class="btn btn-soft" onclick="quick('AT^TEMP?')">Temperature</button>
+              <button class="btn btn-soft" onclick="runPreset('ATI', 'Info Modem')">INFO MODEM</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^DEBUG?', 'Debug Info')">DEBUG INFO</button>
+              <button class="btn btn-soft" onclick="runPreset('AT+CIMI', 'IMSI SIM')">IMSI SIM</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^GETLTECAT?', 'CAT Modem')">CAT Modem</button>
+              <button class="btn btn-soft" onclick="runPreset('AT+CSQ', 'Signal Quality')">Signal</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^USBTYPE', 'USB Mode')">USB Mode</button>
+              <button class="btn btn-soft" onclick="runPreset('AT+VOLT?', 'Voltage')">Voltase</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^TEMP?', 'Temperature')">Temperature</button>
             </div>
           </div>
 
           <div class="card">
             <h3>📶 Signal & Band</h3>
             <div class="btn-grid">
-              <button class="btn btn-soft" onclick="quick('AT^CA_INFO?')">CA Info</button>
-              <button class="btn btn-soft" onclick="quick('AT+VZWRSRP?')">RSRP Neighbour</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND?')">Cek Lock Band</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND')">Reset Lock Band</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^CA_INFO?', 'CA Info')">CA Info</button>
+              <button class="btn btn-soft" onclick="runPreset('AT+VZWRSRP?', 'RSRP Neighbour')">RSRP Neighbour</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND?', 'Cek Lock Band')">Cek Lock Band</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND', 'Reset Lock Band')">Reset Lock Band</button>
             </div>
           </div>
 
           <div class="card">
             <h3>⚡ Carrier Aggregation</h3>
             <div class="btn-grid">
-              <button class="btn btn-ok" onclick="quick('AT^CA_ENABLE=0')">Enable CA</button>
-              <button class="btn btn-danger" onclick="quick('AT^CA_ENABLE=1')">Disable CA</button>
+              <button class="btn btn-ok" onclick="runPreset('AT^CA_ENABLE=0', 'Enable CA')">Enable CA</button>
+              <button class="btn btn-danger" onclick="runPreset('AT^CA_ENABLE=1', 'Disable CA')">Disable CA</button>
             </div>
           </div>
 
           <div class="card">
             <h3>🛰️ GPS</h3>
             <div class="btn-grid">
-              <button class="btn btn-ok" onclick="quick('AT+GPS=1')">Enable GPS</button>
-              <button class="btn btn-danger" onclick="quick('AT+GPS=0')">Disable GPS</button>
+              <button class="btn btn-ok" onclick="runPreset('AT+GPS=1', 'Enable GPS')">Enable GPS</button>
+              <button class="btn btn-danger" onclick="runPreset('AT+GPS=0', 'Disable GPS')">Disable GPS</button>
             </div>
           </div>
 
           <div class="card">
             <h3>🔧 Mode Jaringan</h3>
             <div class="btn-grid">
-              <button class="btn btn-soft" onclick="quick('AT^SLMODE=1,14')">WCDMA Only</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLMODE=1,30')">LTE Only</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLMODE=1,35')">WCDMA & LTE</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLMODE=1,14', 'WCDMA Only')">WCDMA Only</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLMODE=1,30', 'LTE Only')">LTE Only</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLMODE=1,35', 'WCDMA & LTE')">WCDMA & LTE</button>
             </div>
           </div>
 
           <div class="card">
             <h3>⚙️ System</h3>
             <div class="btn-grid">
-              <button class="btn btn-ok" onclick="quick('AT')">Cek AT</button>
+              <button class="btn btn-ok" onclick="runPreset('AT', 'Cek AT')">Cek AT</button>
               <button class="btn btn-danger" onclick="confirmQuick('AT^RESET', 'Restart modem sekarang?')">Restart Modem</button>
             </div>
           </div>
@@ -126,24 +126,33 @@
           <div class="card span-2">
             <h3>🔒 Lock Band</h3>
             <div class="btn-grid">
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,1')">B1</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,3')">B3</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,5')">B5</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,8')">B8</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,40')">B40</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,1,3')">B1+B3</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,1,8')">B1+B8</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,3,8')">B3+B8</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,1,40')">B1+B40</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,3,40')">B3+B40</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,8,40')">B8+B40</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,1,3,8')">B1+B3+B8</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,1,3,40')">B1+B3+B40</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,1,8,40')">B1+B8+B40</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,3,8,40')">B3+B8+B40</button>
-              <button class="btn btn-soft" onclick="quick('AT^SLBAND=LTE,2,1,3,8,40')">B1+B3+B8+B40</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,1', 'Lock B1')">B1</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,3', 'Lock B3')">B3</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,5', 'Lock B5')">B5</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,8', 'Lock B8')">B8</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,40', 'Lock B40')">B40</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,1,3', 'Lock B1+B3')">B1+B3</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,1,8', 'Lock B1+B8')">B1+B8</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,3,8', 'Lock B3+B8')">B3+B8</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,1,40', 'Lock B1+B40')">B1+B40</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,3,40', 'Lock B3+B40')">B3+B40</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,8,40', 'Lock B8+B40')">B8+B40</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,1,3,8', 'Lock B1+B3+B8')">B1+B3+B8</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,1,3,40', 'Lock B1+B3+B40')">B1+B3+B40</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,1,8,40', 'Lock B1+B8+B40')">B1+B8+B40</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,3,8,40', 'Lock B3+B8+B40')">B3+B8+B40</button>
+              <button class="btn btn-soft" onclick="runPreset('AT^SLBAND=LTE,2,1,3,8,40', 'Lock B1+B3+B8+B40')">B1+B3+B8+B40</button>
             </div>
           </div>
+        </div>
+
+        <!-- DETAILED PRESET EXECUTION LOG -->
+        <div class="card span-2" style="margin-top:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h3 style="margin:0;">📋 Preset Execution Log (Detailed)</h3>
+            <button class="btn btn-sm btn-ghost" onclick="clearPresetLog()">Clear Log</button>
+          </div>
+          <div id="preset-log-content" class="preset-log" style="min-height:160px; max-height:280px;"></div>
         </div>
       </section>
 
@@ -251,6 +260,7 @@
   <script src="/js/api.js"></script>
   <script src="/js/terminal.js"></script>
   <script src="/js/imei.js"></script>
+  <script src="/js/presets.js?v=1784534595"></script>
   <script src="/js/app.js"></script>
 </body>
 </html>

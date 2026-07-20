@@ -124,25 +124,33 @@ async function processATQueue() {
 
   while (atQueue.length > 0) {
     const { command, timeoutMs, resolve } = atQueue.shift();
+    // Cap timeout so UI stays responsive (default 3s, max 8s)
+    const effectiveTimeout = Math.min(Math.max(timeoutMs || 3000, 1000), 8000);
     let result = null;
     let lastErr = null;
 
-    // Retry up to 3 times
-    for (let attempt = 0; attempt < 3; attempt++) {
+    // At most 2 attempts (not 3) — first failure usually means port busy
+    for (let attempt = 0; attempt < 2; attempt++) {
       try {
-        // Delay to let port settle
-        await new Promise(r => setTimeout(r, 500 + attempt * 200));
+        // Short settle only on retry
+        if (attempt > 0) {
+          // Clear any leftover at_exec holding the port
+          try { await execAsync('pkill -f "at_exec /dev/ttyUSB" || true', { timeout: 1000 }); } catch (_) {}
+          await new Promise(r => setTimeout(r, 150));
+        }
 
         // Use JSON.stringify so quotes/commas in AT commands are shell-safe
         // e.g. AT^NV=550,9,"08,3A,..."
-        const cmd = `at_exec ${JSON.stringify(currentPort)} ${JSON.stringify(command)} ${timeoutMs}`;
-        const { stdout, stderr } = await execAsync(cmd, { timeout: timeoutMs + 2000 });
+        const cmd = `at_exec ${JSON.stringify(currentPort)} ${JSON.stringify(command)} ${effectiveTimeout}`;
+        const { stdout, stderr } = await execAsync(cmd, { timeout: effectiveTimeout + 1000 });
         const output = (stdout || '').trim() || (stderr || '').trim();
 
         if (output && (output.includes('OK') || output.includes('ERROR') || output.length > 5)) {
           result = output;
           break;
         }
+        // Empty/no useful response — retry once
+        lastErr = new Error('Empty AT response');
       } catch (err) {
         lastErr = err;
         // Prefer stdout/stderr from failed command if any
