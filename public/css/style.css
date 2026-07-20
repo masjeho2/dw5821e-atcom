@@ -381,3 +381,114 @@ code, .terminal, .prompt, .step-cmd, #nv550-preview, #at-input, #imei-input, #po
   .step { grid-template-columns: 36px 1fr; }
   .step .btn { grid-column: 1 / -1; }
 }
+
+/* Inbox */
+.inbox-toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.inbox-stats {
+  display: flex;
+  gap: 14px;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.inbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 55vh;
+  overflow: auto;
+}
+.inbox-empty {
+  color: var(--muted);
+  padding: 18px 8px;
+  text-align: center;
+}
+.inbox-item {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+}
+.inbox-item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+.inbox-from {
+  font-weight: 700;
+  color: var(--cyan);
+}
+.inbox-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.inbox-time {
+  color: var(--muted);
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.inbox-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+}
+.badge-new {
+  color: var(--green);
+  border-color: rgba(61,255,154,.35);
+  background: rgba(61,255,154,.1);
+}
+.badge-old {
+  color: var(--muted);
+}
+.inbox-body {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text);
+  line-height: 1.45;
+  margin-bottom: 10px;
+}
+.inbox-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.inbox-source {
+  color: var(--muted);
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.sms-compose {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sms-compose input,
+.sms-compose textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--green);
+  border-radius: 12px;
+  padding: 12px 14px;
+  outline: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+}
+.sms-compose textarea {
+  min-height: 90px;
+  resize: vertical;
+  color: var(--text);
+}

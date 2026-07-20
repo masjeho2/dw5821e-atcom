@@ -581,6 +581,94 @@ app.post('/api/at/batch', async (req, res) => {
   }
 });
 
+// === SMS INBOX (modular: ./sms/*) ===
+// sms/mmcli.js  -> ModemManager list/read/send/delete
+// sms/at.js     -> AT CMGL/CPMS/CNMI setup
+// sms/history.js-> local history so UI can show > current MM list
+// sms/index.js  -> facade used by routes below
+const sms = require('./sms');
+
+app.get('/api/sms/inbox', async (req, res) => {
+  try {
+    const data = await sms.listInbox(execAT, { includeHistory: true });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.get('/api/sms', async (req, res) => {
+  try {
+    const data = await sms.listInbox(execAT, { includeHistory: true });
+    res.json(data.messages || []);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.get('/api/sms/storage', async (req, res) => {
+  try {
+    const data = await sms.getStorage(execAT);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// OpenWrt-style SMS reception setup: CMGF + CPMS + CNMI
+app.post('/api/sms/setup', async (req, res) => {
+  try {
+    const data = await sms.setupReception(execAT);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.get('/api/sms/history', (req, res) => {
+  try {
+    res.json(sms.listHistoryOnly());
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.delete('/api/sms/history', (req, res) => {
+  try {
+    res.json(sms.clearHistory());
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/sms/send', async (req, res) => {
+  try {
+    const { number, text, message } = req.body || {};
+    const result = await sms.sendSms(number, text || message);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.delete('/api/sms/:id', async (req, res) => {
+  try {
+    const result = await sms.deleteSms(req.params.id);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.delete('/api/sms', async (req, res) => {
+  try {
+    const result = await sms.deleteAll(execAT);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // SPA fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));

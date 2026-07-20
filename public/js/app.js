@@ -14,6 +14,11 @@ function switchTab(name) {
   if (name === 'imei') {
     Imei.checkPending();
   }
+  if (name === 'inbox') {
+    if (typeof Inbox !== 'undefined') Inbox.onShow();
+  } else if (typeof Inbox !== 'undefined') {
+    Inbox.stopAuto();
+  }
 }
 
 async function checkStatus() {

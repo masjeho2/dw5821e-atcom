@@ -31,6 +31,7 @@
     <nav class="tabs">
       <button class="tab active" data-tab="terminal" onclick="switchTab('terminal')">Terminal</button>
       <button class="tab" data-tab="presets" onclick="switchTab('presets')">Presets</button>
+      <button class="tab" data-tab="inbox" onclick="switchTab('inbox')">Inbox</button>
       <button class="tab" data-tab="imei" onclick="switchTab('imei')">IMEI</button>
     </nav>
 
@@ -156,6 +157,41 @@
         </div>
       </section>
 
+      <!-- INBOX TAB -->
+      <section id="tab-inbox" class="tab-panel">
+        <div class="grid-2">
+          <div class="card span-2">
+            <div class="card-head">
+              <h2>💬 SMS Inbox</h2>
+              <div class="btn-grid">
+                <button class="btn btn-primary" onclick="refreshInbox()">Refresh</button>
+                <button class="btn btn-danger" onclick="deleteAllInbox()">Delete All</button>
+              </div>
+            </div>
+            <p class="hint">Refresh otomatis setup CNMI/CPMS lalu ambil SMS (mmcli + AT + history lokal).</p>
+            <div class="inbox-stats">
+              <span>Total: <strong id="inbox-count">0</strong></span>
+              <span id="inbox-storage">Storage: --</span>
+            </div>
+            <div id="inbox-status" class="status-text">Siap.</div>
+            <div id="inbox-list" class="inbox-list">
+              <div class="inbox-empty">Belum ada SMS. Klik Refresh.</div>
+            </div>
+          </div>
+
+          <div class="card span-2">
+            <h3>✉️ Kirim SMS</h3>
+            <div class="sms-compose">
+              <input id="sms-number" type="text" placeholder="Nomor tujuan, contoh +62812..." />
+              <textarea id="sms-text" placeholder="Isi pesan..."></textarea>
+              <div class="btn-grid">
+                <button class="btn btn-ok" onclick="sendInboxSms()">Kirim SMS</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- IMEI TAB -->
       <section id="tab-imei" class="tab-panel">
         <div class="grid-2">
@@ -261,6 +297,7 @@
   <script src="/js/terminal.js"></script>
   <script src="/js/imei.js"></script>
   <script src="/js/presets.js?v=1784534595"></script>
+  <script src="/js/inbox.js"></script>
   <script src="/js/app.js"></script>
 </body>
 </html>
