@@ -7,6 +7,45 @@
  *   AT+CMGL="ALL"
  */
 
+/**
+ * Some DW5821e firmwares return the SMS body as a hex dump instead of text
+ * (common with operator class-0 / 8-bit data SMS, even in CMGF=1 mode).
+ * Detect strict-hex bodies and decode: UCS-2BE if high bytes are mostly 0x00,
+ * else plain ASCII/UTF-8.
+ */
+function decodeHexBody(text) {
+  const clean = String(text || '').replace(/\s+/g, '');
+  if (clean.length < 16 || clean.length % 2 !== 0 || !/^[0-9A-Fa-f]+$/.test(clean)) {
+    return null;
+  }
+  const buf = Buffer.from(clean, 'hex');
+
+  let zeroHigh = 0;
+  for (let i = 0; i < buf.length; i += 2) {
+    if (buf[i] === 0) zeroHigh++;
+  }
+
+  let decoded;
+  if (zeroHigh >= buf.length / 6) {
+    // UCS-2BE: pairs of (00, char)
+    let s = '';
+    for (let i = 0; i + 1 < buf.length; i += 2) {
+      s += String.fromCharCode((buf[i] << 8) | buf[i + 1]);
+    }
+    decoded = s;
+  } else {
+    decoded = buf.toString('utf8');
+  }
+
+  // Sanity check: decoded must be mostly printable, else it wasn't hex text
+  let printable = 0;
+  for (const ch of decoded) {
+    const c = ch.codePointAt(0);
+    if (c === 9 || c === 10 || c === 13 || (c >= 32 && c !== 127)) printable++;
+  }
+  return printable / decoded.length >= 0.9 ? decoded : null;
+}
+
 function parseCmgl(raw) {
   if (!raw || raw === 'OK' || /ERROR/i.test(raw)) return [];
   const list = [];
@@ -26,15 +65,17 @@ function parseCmgl(raw) {
       j++;
     }
     const body = bodyLines.join('\n').trim();
+    const decoded = decodeHexBody(body);
     list.push({
       source: 'at',
       path: null,
       index: m[1],
       number: m[3],
-      text: body,
+      text: decoded || body,
       timestamp: m[4] || '',
       state: m[2] || 'unknown',
-      storage: 'at'
+      storage: 'at',
+      encoded: decoded ? 'hex' : 'text'
     });
     i = j - 1;
   }
@@ -118,6 +159,7 @@ async function deleteByIndex(execAT, index) {
 }
 
 module.exports = {
+  decodeHexBody,
   parseCmgl,
   setupReception,
   listMessages,

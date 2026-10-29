@@ -6,6 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { decodeHexBody } = require('./at');
 
 const DATA_DIR = path.join(__dirname, '..', 'data', 'sms');
 const HISTORY_FILE = path.join(DATA_DIR, 'history.json');
@@ -31,7 +32,20 @@ function load() {
     ensureDir();
     if (!fs.existsSync(HISTORY_FILE)) return [];
     const data = JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8'));
-    return Array.isArray(data.messages) ? data.messages : [];
+    if (!Array.isArray(data.messages)) return [];
+    // Migrate old entries saved as hex dumps before the decoder existed
+    let changed = false;
+    const messages = data.messages.map((m) => {
+      if (m.encoded === 'hex') return m; // already migrated
+      const decoded = decodeHexBody(m.text);
+      if (decoded) {
+        changed = true;
+        return { ...m, text: decoded, encoded: 'hex (migrated)' };
+      }
+      return m;
+    });
+    if (changed) save(messages);
+    return messages;
   } catch {
     return [];
   }

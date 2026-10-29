@@ -44,7 +44,11 @@ function saveSessions() {
     for (const [token, session] of sessions.entries()) {
       obj[token] = session;
     }
-    fs.writeFileSync(SESSION_FILE, JSON.stringify(obj));
+    // Atomic async write — never blocks the event loop on login/logout
+    const tmp = SESSION_FILE + '.tmp';
+    fs.writeFile(tmp, JSON.stringify(obj), () =>
+      fs.rename(tmp, SESSION_FILE, () => {})
+    );
   } catch (e) {
     console.log('[AUTH] Failed to save sessions:', e.message);
   }
@@ -183,9 +187,36 @@ async function checkPort() {
 }
 
 // === AUTH API ===
+// Timing-safe compare: hash both sides to a fixed-length digest first,
+// so response time never leaks how many chars matched.
+function safeEqual(a, b) {
+  const ha = crypto.createHash('sha256').update(String(a)).digest();
+  const hb = crypto.createHash('sha256').update(String(b)).digest();
+  return crypto.timingSafeEqual(ha, hb);
+}
+
+// Simple in-memory rate limit for login: 5 attempts / 15s window per IP
+const loginAttempts = new Map();
+function isRateLimited(ip) {
+  const now = Date.now();
+  const WINDOW = 15000;
+  const MAX = 5;
+  const list = (loginAttempts.get(ip) || []).filter(t => now - t < WINDOW);
+  if (list.length >= MAX) {
+    loginAttempts.set(ip, list);
+    return true;
+  }
+  list.push(now);
+  loginAttempts.set(ip, list);
+  return false;
+}
+
 app.post('/api/login', (req, res) => {
-  const { password } = req.body;
-  if (password === PASSWORD) {
+  if (isRateLimited(req.ip)) {
+    return res.status(429).json({ success: false, error: 'Too many attempts, wait 15 seconds' });
+  }
+  const { password } = req.body || {};
+  if (typeof password === 'string' && safeEqual(password, PASSWORD)) {
     const token = createSession();
     res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`);
     res.json({ success: true, token });

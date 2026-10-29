@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+/* Local font stack — no external @import so the app renders instantly on LAN/offline */
 
 :root {
   --bg: #070b12;
@@ -26,11 +26,11 @@ body {
     radial-gradient(circle at top left, rgba(61,255,154,.08), transparent 24%),
     var(--bg);
   color: var(--text);
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
 }
 
 code, .terminal, .prompt, .step-cmd, #nv550-preview, #at-input, #imei-input, #port-select {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Cascadia Mono', 'Fira Mono', monospace;
 }
 
 .app {
@@ -246,7 +246,7 @@ code, .terminal, .prompt, .step-cmd, #nv550-preview, #at-input, #imei-input, #po
 }
 
 .imei-display {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Cascadia Mono', 'Fira Mono', monospace;
   font-size: 22px;
   font-weight: 600;
   color: var(--green);
@@ -296,7 +296,7 @@ code, .terminal, .prompt, .step-cmd, #nv550-preview, #at-input, #imei-input, #po
   border-bottom: 1px solid rgba(31,44,66,.8);
   color: var(--cyan);
   font-size: 12px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Cascadia Mono', 'Fira Mono', monospace;
 }
 
 .steps { display: flex; flex-direction: column; gap: 10px; }
@@ -336,7 +336,7 @@ code, .terminal, .prompt, .step-cmd, #nv550-preview, #at-input, #imei-input, #po
   max-height: 220px;
   overflow: auto;
   padding: 12px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Cascadia Mono', 'Fira Mono', monospace;
   font-size: 12px;
   color: var(--muted);
 }
@@ -352,7 +352,7 @@ code, .terminal, .prompt, .step-cmd, #nv550-preview, #at-input, #imei-input, #po
   max-height: 260px;
   overflow: auto;
   padding: 12px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Cascadia Mono', 'Fira Mono', monospace;
   font-size: 12px;
   color: var(--muted);
   white-space: pre-wrap;
@@ -436,7 +436,7 @@ code, .terminal, .prompt, .step-cmd, #nv550-preview, #at-input, #imei-input, #po
 .inbox-time {
   color: var(--muted);
   font-size: 12px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Cascadia Mono', 'Fira Mono', monospace;
 }
 .inbox-badge {
   font-size: 11px;
@@ -468,7 +468,7 @@ code, .terminal, .prompt, .step-cmd, #nv550-preview, #at-input, #imei-input, #po
 .inbox-source {
   color: var(--muted);
   font-size: 11px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Cascadia Mono', 'Fira Mono', monospace;
 }
 .sms-compose {
   display: flex;
@@ -484,7 +484,7 @@ code, .terminal, .prompt, .step-cmd, #nv550-preview, #at-input, #imei-input, #po
   border-radius: 12px;
   padding: 12px 14px;
   outline: none;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Cascadia Mono', 'Fira Mono', monospace;
   font-size: 13px;
 }
 .sms-compose textarea {
